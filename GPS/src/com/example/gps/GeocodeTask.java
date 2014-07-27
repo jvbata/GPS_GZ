@@ -1,4 +1,4 @@
-package com.example.geocode;
+package com.example.gps;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,7 +74,7 @@ public class GeocodeTask extends AsyncTask<String, Void, Boolean> {
 		}
 
 		try {
-			
+
 			geocode_successful = parseJSONData(jsonData);
 
 		} catch (JSONException e) {
@@ -83,16 +83,6 @@ public class GeocodeTask extends AsyncTask<String, Void, Boolean> {
 		}
 
 		return geocode_successful;
-	}
-
-	@Override
-	protected void onPostExecute(Boolean geocode_successful) {
-		super.onPostExecute(geocode_successful);
-
-		if(geocode_successful) {
-			Toast.makeText(context, "Address = " + address, Toast.LENGTH_LONG)
-					.show();
-		}
 	}
 
 	private String retrieveJSONData(InputStream inputStream,
@@ -129,9 +119,9 @@ public class GeocodeTask extends AsyncTask<String, Void, Boolean> {
 	}
 
 	private boolean parseJSONData(String jsonData) throws JSONException {
-		
+
 		boolean geocode_successful = false;
-		
+
 		// Get the root JSONObject
 		JSONObject jsonGeocode = new JSONObject(jsonData);
 
@@ -145,8 +135,24 @@ public class GeocodeTask extends AsyncTask<String, Void, Boolean> {
 
 			geocode_successful = true;
 		}
-		
+
 		return geocode_successful;
 
+	}
+
+	@Override
+	protected void onPostExecute(Boolean geocode_successful) {
+		super.onPostExecute(geocode_successful);
+
+		if (geocode_successful) {
+			Toast.makeText(context, "Address = " + address, Toast.LENGTH_LONG)
+					.show();
+
+		} else {
+
+			Toast.makeText(context,
+					"Can not retrieve location for:\n latitude: " + latitude
+							+ "\nlongitude:" + longitude, Toast.LENGTH_LONG).show();
+		}
 	}
 }
